@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host  # Use host for better discovery
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - PLEX_CLAIM=claim-8Cz6swSGtGyjtMgrNKAv  
+    volumes:
+      - /mnt/t5/plex/config:/config
+      - /mnt/wdhdd/Movies:/data/movies
+      - /mnt/wdhdd/TV:/data/tv
+      - /mnt/wdhdd/Music:/data/music
+    restart: unless-stopped
+

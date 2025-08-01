@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    user: "1000:1003" # replace with your UID:GID (use `id` command)
+    volumes:
+      - /mnt/t5:/srv/media # host folder to access via browser
+      - /home/wamik:/srv/home  
+      - /mnt/t5/Browser:/config    
+    ports:
+      - 8095:80
+    restart: unless-stopped
+

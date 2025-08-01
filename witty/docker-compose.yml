@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  wetty:
+    image: wettyoss/wetty
+    container_name: wetty
+    ports:
+      - "3001:3000"
+    command: --ssh-host 192.168.0.211 --ssh-user wamik
+    restart: unless-stopped
+

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  netdata:
+    image: netdata-with-smartctl
+    container_name: netdata
+    restart: unless-stopped
+
+    # Required for full system monitoring
+    pid: host
+    network_mode: host
+    privileged: true
+
+    cap_add:
+      - SYS_PTRACE
+
+    security_opt:
+      - apparmor:unconfined
+
+    environment:
+      - NETDATA_HOST_ROOT=/host
+      - DOCKER_USING_HOST_PID_NAMESPACE=1  # For container name resolution
+      - NETDATA_HISTORY=86400               # 24 hours of 1s-resolution metrics
+      - NETDATA_DBENGINE_DISK_SPACE=1024    # 1 GB disk space for metrics
+      - NETDATA_DBENGINE_PAGE_CACHE_SIZE=64 # 64 MB RAM cache
+
+    volumes:
+      # Persistent Netdata data and configuration
+      - /dev/sdb:/dev/sdb
+      - /mnt/t5/Netdata/config:/etc/netdata
+      - /mnt/t5/Netdata/lib:/var/lib/netdata
+      - /mnt/t5/Netdata/cache:/var/cache/netdata
+      - /mnt/t5/Netdata/log:/var/log/netdata    # ✅ Log persistence
+
+      # Host monitoring
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /sys/class/thermal:/sys/class/thermal:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /:/host:ro
+
+      # Optional: Mount full /mnt/t5 for visibility
+      - /mnt/t5:/host/mnt/t5:ro
+
+      # Docker monitoring
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+
+

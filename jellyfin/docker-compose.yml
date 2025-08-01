@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    network_mode: host
+    volumes:
+      - /mnt/t5/jellyfin/config:/config
+      - /mnt/wdhdd/Movies:/media/movies
+      - /mnt/wdhdd/TV:/media/tv
+      - /mnt/wdhdd/Music:/media/music
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Kolkata
+
