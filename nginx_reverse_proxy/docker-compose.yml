@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_reverse_proxy
+    restart: always
+    ports:
+      - "80:81"                       # Container port 81 mapped to host port 80
+    volumes:
+      - /home/wamik/nginx-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - nginx-proxy_default
+
+networks:
+  nginx-proxy_default:
+    external: true                   # Because the container is using an existing network
