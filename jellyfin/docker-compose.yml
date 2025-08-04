@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    network_mode: host
+    restart: unless-stopped
+    devices:
+      - /dev:/dev   # Pass all video devices for hardware acceleration
+    volumes:
+      - /mnt/t5/jellyfin/config:/config
+      - /mnt/wdhdd/Movies:/media/movies
+      - /mnt/wdhdd/TV:/media/tv
+      - /mnt/wdhdd/Music:/media/music
+    environment:
+      - TZ=Asia/Kolkata
+    deploy:
+      resources:
+        limits:
+          cpus: '2'       # Limit to 2 CPU cores
+          memory: 3G      # Limit memory usage to 3 GB
