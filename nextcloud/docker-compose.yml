@@ -39,4 +39,8 @@ services:
     environment:
       - JWT_ENABLED=true
       - JWT_SECRET=my_super_secret_key
-
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"       # Limit to 1 CPU core
+          memory: 2G        # Limit memory usage to 2GB
