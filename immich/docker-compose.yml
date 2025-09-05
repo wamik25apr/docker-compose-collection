@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  immich-server:
+    container_name: immich-server
+    image: ghcr.io/immich-app/immich-server:v1.115.0
+    restart: unless-stopped
+    ports:
+      - "2283:2283"
+    environment:
+      DB_URL: postgres://immich:immich@immich-db:5432/immich
+      NODE_ENV: production
+    depends_on:
+      - immich-db
+    volumes:
+      - /mnt/t5/immich/photos:/usr/src/app/upload
+      - /mnt/wdhdd/Photo:/usr/src/app/library:ro
+    cpus: "1.5"
+    mem_limit: 2g
+
+  immich-machine-learning:
+    container_name: immich-machine-learning
+    image: ghcr.io/immich-app/immich-machine-learning:v1.115.0
+    restart: unless-stopped
+    volumes:
+      - /mnt/t5/immich/cache:/cache
+    environment:
+      TRANSFORMERS_CACHE: /cache
+    cpus: "1.5"
+    mem_limit: 2g
+
+  immich-db:
+    container_name: immich-db
+    image: tensorchord/pgvecto-rs:pg16-v0.2.0
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: immich
+      POSTGRES_USER: immich
+      POSTGRES_PASSWORD: immich
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    cpus: "0.5"
+    mem_limit: 512m
+
+volumes:
+  db_data:
