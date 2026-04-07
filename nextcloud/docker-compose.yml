@@ -4,6 +4,7 @@ services:
 
   db:
     image: mariadb:10.11
+    container_name: nextcloud_db
     restart: always
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     environment:
@@ -15,7 +16,8 @@ services:
       - /mnt/t5/nextcloud_db:/var/lib/mysql
 
   app:
-    image: nextcloud
+    image: nextcloud:apache
+    container_name: nextcloud_app
     restart: always
     ports:
       - 8888:80
@@ -27,8 +29,7 @@ services:
       MYSQL_USER: nextcloud
       MYSQL_HOST: db
     volumes:
-      - /mnt/wdhdd/nextcloud/data:/var/www/html/data
-      - /mnt/wdhdd/nextcloud/config:/var/www/html/config
+      - /mnt/wdhdd/nextcloud:/var/www/html
 
   onlyoffice:
     image: onlyoffice/documentserver
@@ -42,5 +43,5 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1.0"       # Limit to 1 CPU core
-          memory: 2G        # Limit memory usage to 2GB
+          cpus: "1.0"
+          memory: 2G
